@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Moonledger</title>
+<meta name="theme-color" content="#0f0a0e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Moonledger">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0f0a0e;--panel:#181019;--line:rgba(154,136,168,.22);--heather:#9a88a8;--moon:#e6dfd0;--rose:#d4809a}
+*{box-sizing:border-box;margin:0;font-weight:400}
+html{background:var(--ink);color-scheme:dark}
+body{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-variant-numeric:lining-nums;color:var(--moon);
+  background:radial-gradient(120% 55% at 50% 0%,#2a1424 0%,var(--ink) 62%) no-repeat,var(--ink);
+  min-height:100vh;line-height:1.45;font-size:1.15rem;
+  padding:max(1rem,env(safe-area-inset-top)) 1.1rem calc(2.5rem + env(safe-area-inset-bottom))}
+main{max-width:30rem;margin:0 auto;display:grid;gap:1.1rem}
+header{display:flex;justify-content:space-between;align-items:center}
+h1{font-size:1.7rem;letter-spacing:.02em}
+h2{font-size:1.25rem;color:var(--heather);margin-bottom:.5rem}
+.hbtns{display:flex;gap:.5rem}
+.muted{color:var(--heather);font-size:1.05rem}
+.big{font-size:2.1rem;line-height:1.15}
+button,input{font:inherit;color:inherit;font-style:italic}
+.pill{background:none;border:1px solid var(--line);border-radius:999px;padding:.2rem .9rem;cursor:pointer}
+.pill:hover{border-color:var(--heather)}
+:focus-visible{outline:2px solid var(--rose);outline-offset:3px;border-radius:6px}
+
+.moon-wrap{text-align:center;padding:.5rem 0 .2rem}
+#moon{width:min(62vw,15rem);height:auto;display:block;margin:0 auto .6rem;filter:drop-shadow(0 0 28px rgba(230,223,208,.18))}
+@media (prefers-reduced-motion:no-preference){#shade{transition:cx 1.4s cubic-bezier(.2,.7,.2,1)}}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1.1rem 1.2rem}
+.amt{display:flex;align-items:baseline;gap:.4rem;border-bottom:1px solid var(--line);padding-bottom:.2rem;margin-bottom:.8rem}
+.amt span{font-size:1.8rem;color:var(--heather)}
+.amt input{flex:1;min-width:0;background:none;border:0;font-size:2.2rem;outline:none}
+.amt:focus-within{border-color:var(--rose)}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.9rem}
+.chip{background:none;border:1px solid var(--line);border-radius:999px;padding:.1rem .85rem;cursor:pointer;color:var(--heather)}
+.chip[aria-pressed=true]{border-color:var(--rose);color:var(--moon);background:rgba(212,128,154,.12)}
+.row{display:flex;gap:.7rem;align-items:center}
+.row input[type=date]{flex:1;min-width:0;background:none;border:1px solid var(--line);border-radius:10px;padding:.35rem .6rem}
+.primary{background:var(--moon);color:var(--ink);border:0;border-radius:10px;padding:.45rem 1.4rem;cursor:pointer;font-size:1.15rem}
+.primary:active{transform:scale(.97)}
+#msg{min-height:1.4rem;margin-top:.5rem;color:var(--rose);font-size:1rem}
+
+.tabs{display:flex;gap:1.2rem;margin-bottom:.6rem}
+.tabs button{background:none;border:0;border-bottom:1px solid transparent;padding:.1rem 0;color:var(--heather);cursor:pointer;font-size:1.2rem}
+.tabs button[aria-selected=true]{color:var(--moon);border-color:var(--rose)}
+.cat{display:grid;grid-template-columns:1fr auto;margin-top:.55rem}
+.cat i{grid-column:1/-1;height:2px;background:var(--rose);opacity:.7;border-radius:2px;margin-top:.2rem}
+ul{list-style:none;padding:0;margin-top:1rem;border-top:1px solid var(--line)}
+li{display:grid;grid-template-columns:1fr auto auto 1.6rem;gap:.7rem;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--line)}
+li.empty{display:block;color:var(--heather);border:0}
+.x{background:none;border:0;color:var(--heather);cursor:pointer;font-size:1.3rem;line-height:1}
+.x:hover{color:var(--rose)}
+.bar{height:3px;background:var(--line);border-radius:3px;margin:.7rem 0 .4rem;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--rose)}
+
+dialog{background:var(--panel);color:var(--moon);border:1px solid var(--line);border-radius:16px;padding:1.3rem;width:min(92vw,24rem);margin:auto}
+dialog::backdrop{background:rgba(5,3,5,.75)}
+dialog label{display:block;margin-top:.8rem;color:var(--heather)}
+dialog input[type=number]{width:100%;background:none;border:1px solid var(--line);border-radius:10px;padding:.4rem .6rem;font-size:1.2rem;margin-top:.2rem}
+.dlg-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.1rem}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Moonledger</h1>
+    <div class="hbtns">
+      <button id="install" class="pill" hidden>Install</button>
+      <button id="open-settings" class="pill">Settings</button>
+    </div>
+  </header>
+
+  <section class="moon-wrap" aria-live="polite">
+    <svg id="moon" viewBox="0 0 200 200" role="img" aria-label="This month's spending shown as a moon phase">
+      <defs>
+        <clipPath id="disc"><circle cx="100" cy="100" r="84"/></clipPath>
+        <radialGradient id="lit" cx="40%" cy="38%" r="75%">
+          <stop offset="0" stop-color="#f4eee0"/><stop offset="1" stop-color="#cfc6b3"/>
+        </radialGradient>
+      </defs>
+      <circle cx="100" cy="100" r="84" fill="url(#lit)"/>
+      <g clip-path="url(#disc)"><circle id="shade" cx="268" cy="100" r="84" fill="#0f0a0e" opacity=".95"/></g>
+      <circle cx="100" cy="100" r="84" fill="none" stroke="#9a88a8" stroke-opacity=".4"/>
+    </svg>
+    <p id="moon-main" class="big"></p>
+    <p id="moon-sub" class="muted"></p>
+  </section>
+
+  <section class="card" aria-labelledby="add-h">
+    <h2 id="add-h">Add spending</h2>
+    <label class="amt"><span>₹</span><input id="amount" inputmode="decimal" placeholder="0" autocomplete="off" aria-label="Amount in rupees"></label>
+    <div id="chips" class="chips" role="group" aria-label="Category"></div>
+    <div class="row">
+      <input type="date" id="date" aria-label="Date">
+      <button id="add" class="primary">Add</button>
+    </div>
+    <p id="msg" role="status"></p>
+  </section>
+
+  <section class="card">
+    <div class="tabs" role="tablist" aria-label="Period">
+      <button role="tab" data-v="today" aria-selected="true">Today</button>
+      <button role="tab" data-v="week" aria-selected="false">This week</button>
+      <button role="tab" data-v="month" aria-selected="false">This month</button>
+    </div>
+    <p id="range" class="muted"></p>
+    <p id="total" class="big"></p>
+    <p id="meta" class="muted"></p>
+    <div id="cats"></div>
+    <ul id="list"></ul>
+  </section>
+
+  <section class="card" id="savings" aria-live="polite"></section>
+</main>
+
+<dialog id="settings">
+  <h2>Settings</h2>
+  <label>Monthly income (₹)<input type="number" id="income" min="0" step="any" inputmode="decimal"></label>
+  <label>Monthly savings goal (₹)<input type="number" id="goal" min="0" step="any" inputmode="decimal"></label>
+  <div class="dlg-actions">
+    <button class="primary" id="save-settings">Save</button>
+    <button class="pill" id="close-settings">Close</button>
+  </div>
+  <div class="dlg-actions">
+    <button class="pill" id="export">Export backup</button>
+    <button class="pill" id="import-btn">Import backup</button>
+    <button class="pill" id="erase">Erase all</button>
+  </div>
+  <input type="file" id="import" accept="application/json" hidden>
+</dialog>
+
+<script>
+const KEY='moonledger.v1';
+const CATS=['Food','Travel','Study','Shopping','Bills','Fun','Other'];
+const $=s=>document.querySelector(s);
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const short=d=>d.toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+const fmt=n=>(n<0?'-':'')+'₹'+Math.abs(n).toLocaleString('en-IN',{maximumFractionDigits:2});
+const sum=a=>a.reduce((t,i)=>t+i.amt,0);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const blank=()=>({income:0,goal:0,items:[]});
+
+let db=load(), cat=CATS[0], view='today';
+
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem(KEY));
+    return d&&Array.isArray(d.items)?Object.assign(blank(),d):blank();
+  }catch(e){return blank()}
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){flash('Could not save on this device')}}
+
+let flashT;
+function flash(t){const m=$('#msg');m.textContent=t;clearTimeout(flashT);flashT=setTimeout(()=>m.textContent='',2600)}
+
+function weekStart(d){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x}
+function range(v){
+  const n=new Date();
+  if(v==='today')return[ymd(n),ymd(n),n.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'}),1];
+  if(v==='week'){
+    const s=weekStart(n),e=new Date(s);e.setDate(s.getDate()+6);
+    return[ymd(s),ymd(e),short(s)+' to '+short(e),Math.round((parse(ymd(n))-s)/864e5)+1];
+  }
+  return[ymd(new Date(n.getFullYear(),n.getMonth(),1)),ymd(new Date(n.getFullYear(),n.getMonth()+1,0)),
+    n.toLocaleDateString('en-IN',{month:'long',year:'numeric'}),n.getDate()];
+}
+
+function render(){
+  const [a,b,label,days]=range(view);
+  const rows=db.items.slice().reverse().filter(i=>i.date>=a&&i.date<=b).sort((x,y)=>y.date.localeCompare(x.date));
+  const tot=sum(rows);
+  $('#range').textContent=label;
+  $('#total').textContent=fmt(tot);
+  $('#meta').textContent=rows.length
+    ? `${rows.length} ${rows.length===1?'entry':'entries'}`+(view!=='today'?`, about ${fmt(tot/days)} a day`:'')
+    : '';
+  const by={};rows.forEach(i=>by[i.cat]=(by[i.cat]||0)+i.amt);
+  $('#cats').innerHTML=Object.entries(by).sort((x,y)=>y[1]-x[1]).map(([c,v])=>
+    `<div class="cat"><span>${esc(c)}</span><span>${fmt(v)}</span><i style="width:${tot?v/tot*100:0}%"></i></div>`).join('');
+  $('#list').innerHTML=rows.length?rows.map(i=>
+    `<li><span>${esc(i.cat)}</span><span class="muted">${short(parse(i.date))}</span><span>${fmt(i.amt)}</span>`+
+    `<button class="x" data-id="${esc(i.id)}" aria-label="Delete ${esc(i.cat)} ${fmt(i.amt)}">×</button></li>`).join('')
+    :'<li class="empty">Nothing spent in this period yet. Add your first entry above.</li>';
+
+  // month moon + savings
+  const [ms,me]=range('month');
+  const spentM=sum(db.items.filter(i=>i.date>=ms&&i.date<=me));
+  const inc=db.income, f=inc>0?Math.min(spentM/inc,1):0;
+  $('#shade').style.cx=(100+168*(1-f))+'px';
+  if(inc>0){
+    const left=inc-spentM;
+    $('#moon-main').textContent=left>=0?`${fmt(left)} left`:`${fmt(-left)} over`;
+    $('#moon-sub').textContent=`of ${fmt(inc)} this month, ${fmt(spentM)} spent`;
+  }else{
+    $('#moon-main').textContent=`${fmt(spentM)} spent`;
+    $('#moon-sub').textContent='Add your monthly income in Settings and the moon will start to wane.';
+  }
+  let h='<h2>Savings</h2>';
+  if(inc>0){
+    const saved=inc-spentM;
+    h+=`<p class="big">${fmt(saved)}</p><p class="muted">saved so far this month: ${fmt(inc)} income minus ${fmt(spentM)} spent</p>`;
+    if(db.goal>0){
+      const p=Math.max(0,Math.min(saved/db.goal,1));
+      const room=Math.max(inc-db.goal,0)-spentM;
+      h+=`<div class="bar"><i style="width:${p*100}%"></i></div><p>${Math.round(p*100)}% of your ${fmt(db.goal)} goal</p>`+
+         `<p class="muted">${room>=0?`You can spend ${fmt(room)} more and still reach it.`:`You are ${fmt(-room)} past the spending limit for your goal.`}</p>`;
+    }else h+='<p class="muted">Set a monthly savings goal in Settings to track your progress.</p>';
+  }else h+='<p class="muted">Add your monthly income in Settings to see how much you save.</p>';
+  $('#savings').innerHTML=h;
+}
+
+/* add */
+const chips=$('#chips');
+CATS.forEach(c=>{
+  const b=document.createElement('button');
+  b.className='chip';b.textContent=c;b.setAttribute('aria-pressed',c===cat);
+  b.onclick=()=>{cat=c;[...chips.children].forEach(x=>x.setAttribute('aria-pressed',x.textContent===c))};
+  chips.appendChild(b);
+});
+$('#date').value=ymd(new Date());
+function add(){
+  const amt=parseFloat($('#amount').value.replace(/,/g,''));
+  if(!(amt>0)){flash('Enter an amount above 0');$('#amount').focus();return}
+  db.items.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+    amt:Math.round(amt*100)/100,cat,date:$('#date').value||ymd(new Date())});
+  save();$('#amount').value='';flash(`Added ${fmt(amt)} to ${cat}`);render();
+}
+$('#add').onclick=add;
+$('#amount').addEventListener('keydown',e=>{if(e.key==='Enter')add()});
+
+/* tabs + delete */
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  view=b.dataset.v;
+  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  render();
+});
+$('#list').addEventListener('click',e=>{
+  const id=e.target.dataset&&e.target.dataset.id;
+  if(id&&confirm('Delete this entry?')){db.items=db.items.filter(i=>i.id!==id);save();render()}
+});
+
+/* settings */
+const dlg=$('#settings');
+$('#open-settings').onclick=()=>{$('#income').value=db.income||'';$('#goal').value=db.goal||'';dlg.showModal()};
+$('#close-settings').onclick=()=>dlg.close();
+$('#save-settings').onclick=()=>{
+  db.income=Math.max(0,parseFloat($('#income').value)||0);
+  db.goal=Math.max(0,parseFloat($('#goal').value)||0);
+  save();dlg.close();render();
+};
+$('#export').onclick=()=>{
+  const u=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));
+  const a=document.createElement('a');a.href=u;a.download='moonledger-backup.json';a.click();
+  setTimeout(()=>URL.revokeObjectURL(u),1000);
+};
+$('#import-btn').onclick=()=>$('#import').click();
+$('#import').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(!d||!Array.isArray(d.items))throw 0;
+      db=Object.assign(blank(),d);save();dlg.close();render();
+    }catch(x){alert('That file is not a Moonledger backup.')}
+  };
+  r.readAsText(f);e.target.value='';
+};
+$('#erase').onclick=()=>{
+  if(confirm('Erase every entry and setting? This cannot be undone.')){db=blank();save();dlg.close();render()}
+};
+
+/* install + offline */
+let dp;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;$('#install').hidden=false});
+$('#install').onclick=async()=>{if(!dp)return;dp.prompt();await dp.userChoice;dp=null;$('#install').hidden=true};
+addEventListener('appinstalled',()=>$('#install').hidden=true);
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){$('#date').value=ymd(new Date());render()}});
+
+render();
+</script>
+</body>
+</html>
