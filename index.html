@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Moonledger</title>
-<meta name="theme-color" content="#4B0F1E">
+<meta name="theme-color" content="#482639">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Moonledger">
 <link rel="manifest" href="manifest.json">
@@ -38,19 +38,26 @@
     <p class="ey">I · The Moon</p>
     <div class="orb">
       <div class="halo"></div>
-      <svg id="moon" viewBox="0 0 200 200" role="img" aria-label="This month's spending as a moon phase">
+      <svg id="moon" viewBox="0 0 200 200" role="img" aria-label="Money left this month, shown as a glowing moon">
         <defs>
           <mask id="phase">
             <rect width="200" height="200" fill="#fff"/>
             <circle id="shade" cx="268" cy="100" r="84" fill="#000"/>
           </mask>
           <radialGradient id="lit" cx="40%" cy="38%" r="85%">
-            <stop offset="0" stop-color="#F7D6DC"/><stop offset="1" stop-color="#E07A94"/>
+            <stop offset="0" stop-color="#EDEDFF"/>
+            <stop offset=".55" stop-color="#9A9BE0"/>
+            <stop offset="1" stop-color="#5A5B9F"/>
           </radialGradient>
         </defs>
-        <circle cx="100" cy="100" r="84" fill="#F7D6DC" fill-opacity=".08"/>
-        <circle cx="100" cy="100" r="84" fill="url(#lit)" mask="url(#phase)"/>
-        <circle cx="100" cy="100" r="84" fill="none" stroke="#E07A94" stroke-opacity=".5"/>
+        <circle cx="100" cy="100" r="84" fill="#5A5B9F" fill-opacity=".14"/>
+        <g mask="url(#phase)">
+          <circle cx="100" cy="100" r="84" fill="url(#lit)"/>
+          <g fill="#5A5B9F" opacity=".28">
+            <circle cx="76" cy="72" r="14"/><circle cx="122" cy="124" r="19"/><circle cx="64" cy="122" r="8"/><circle cx="128" cy="66" r="7"/><circle cx="98" cy="98" r="5"/>
+          </g>
+        </g>
+        <circle cx="100" cy="100" r="84" fill="none" stroke="#9A9BE0" stroke-opacity=".5"/>
       </svg>
     </div>
     <p class="big" aria-live="polite"><span id="mn"></span><span id="mt"></span></p>
@@ -115,5 +122,6 @@
 
 <script src="app.js"></script>
 <script src="bg.js"></script>
+<script src="moon.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
-const CACHE = 'moonledger-v4';
-const SHELL = ['./', './index.html', './style.css', './theme.css', './app.js', './bg.js', './bg.jpg', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png'];
+const CACHE = 'moonledger-v5';
+const SHELL = ['./', './index.html', './style.css', './theme.css', './app.js', './bg.js', './moon.js', './bg.jpg', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

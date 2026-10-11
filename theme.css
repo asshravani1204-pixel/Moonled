@@ -1,8 +1,31 @@
-:root{--ink:#4B0F1E;--panel:rgba(75,15,30,.78);--line:rgba(224,122,148,.3);--heather:#E07A94;--moon:#F7D6DC;--rose:#CC5671}
-html{background:#2E0812}
+/* palette: Potent Purple #482639, Dusky Orchid #997480, Blue Iris #5A5B9F */
+:root{--ink:#1E0E18;--panel:rgba(72,38,57,.8);--line:rgba(201,166,178,.3);--heather:#C9A6B2;--moon:#F1E4F0;--rose:#8F90E0}
+html{background:#1E0E18}
+
+/* BMW backdrop */
 #bg{position:fixed;inset:0;z-index:-3;background:url(bg.jpg) 0% 50%/cover no-repeat;transition:background-position 1.8s cubic-bezier(.2,.7,.2,1)}
-#bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(75,15,30,.6),rgba(46,8,20,.9))}
-.halo{background:radial-gradient(circle,rgba(224,122,148,.3),transparent 62%)}
-.ember{background:#E07A94;box-shadow:0 0 8px #E07A94}
-.chip[aria-pressed=true]{background:rgba(204,86,113,.3)}
-dialog{background:#3A0B18}
+#bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(72,38,57,.62),rgba(30,14,24,.9))}
+
+/* recolours */
+.ember{background:#C9A6B2;box-shadow:0 0 8px #8F90E0}
+.chip[aria-pressed=true]{background:rgba(90,91,159,.4);border-color:#8F90E0}
+@keyframes sl{from{opacity:0;transform:translateX(-16px);background:rgba(90,91,159,.3)}}
+dialog{background:#3A1B2E}
+
+/* the moon: --r is how much income is left (1 = all, 0 = none) */
+.orb{--r:1}
+.halo{inset:-48%;background:none;animation:none;opacity:calc(.1 + .9*var(--r));transform:scale(calc(.6 + .4*var(--r)));transition:opacity 1.6s ease,transform 1.6s ease}
+.halo::before{content:'';position:absolute;inset:0;background:radial-gradient(circle,rgba(122,123,210,.6),rgba(90,91,159,.2) 45%,transparent 68%);animation:pu 5s ease-in-out infinite}
+#moon{transform:scaleX(-1);transition:filter 1.6s ease;
+  filter:brightness(calc(.4 + .6*var(--r))) drop-shadow(0 0 calc(4px + 22px*var(--r)) rgba(130,131,220,calc(.15 + .65*var(--r))))}
+
+/* sparkles around the moon */
+.sparks{position:absolute;inset:-22%;pointer-events:none}
+.sp,.tap{clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
+.sp{position:absolute;width:var(--s);height:var(--s);background:#E4E4FF;opacity:.8;transform:scale(.7);animation:spk var(--d) ease-in-out var(--dl) infinite}
+.sp.off{display:none}
+@keyframes spk{0%,100%{opacity:0;transform:scale(.2) rotate(0)}50%{opacity:1;transform:scale(1) rotate(45deg)}}
+
+/* sparks on tap */
+.tap{position:fixed;z-index:9999;width:var(--s);height:var(--s);margin:calc(var(--s)/-2) 0 0 calc(var(--s)/-2);background:var(--c);pointer-events:none;animation:tap .7s ease-out forwards}
+@keyframes tap{to{transform:translate(var(--x),var(--y)) scale(0) rotate(160deg);opacity:0}}
