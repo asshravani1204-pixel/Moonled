@@ -1,0 +1,8 @@
+:root{--ink:#4B0F1E;--panel:rgba(75,15,30,.78);--line:rgba(224,122,148,.3);--heather:#E07A94;--moon:#F7D6DC;--rose:#CC5671}
+html{background:#2E0812}
+#bg{position:fixed;inset:0;z-index:-3;background:url(bg.jpg) 0% 50%/cover no-repeat;transition:background-position 1.8s cubic-bezier(.2,.7,.2,1)}
+#bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(75,15,30,.6),rgba(46,8,20,.9))}
+.halo{background:radial-gradient(circle,rgba(224,122,148,.3),transparent 62%)}
+.ember{background:#E07A94;box-shadow:0 0 8px #E07A94}
+.chip[aria-pressed=true]{background:rgba(204,86,113,.3)}
+dialog{background:#3A0B18}
