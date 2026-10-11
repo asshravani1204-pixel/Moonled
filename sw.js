@@ -1,4 +1,4 @@
-const CACHE = 'moonledger-v5';
+const CACHE = 'moonledger-v6';
 const SHELL = ['./', './index.html', './style.css', './theme.css', './app.js', './bg.js', './moon.js', './bg.jpg', './manifest.json', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
